@@ -1,0 +1,55 @@
+From 5bf80cf0b67cee0797f59417a359db98dd5d2ed5 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?=E6=98=9F=E5=A4=96=E4=B9=8B=E7=A5=9E?= <wszqkzqk@qq.com>
+Date: Tue, 3 Jan 2023 13:51:55 +0800
+Subject: [PATCH] vala: correctly judge whether to color output on windows
+ close #1383
+
+---
+ libvaladoc/errorreporter.vala | 7 +++++--
+ vala/valareport.vala          | 7 +++++--
+ 2 files changed, 10 insertions(+), 4 deletions(-)
+
+diff --git a/libvaladoc/errorreporter.vala b/libvaladoc/errorreporter.vala
+index 68b09a8ef..b7ae7646b 100644
+--- a/libvaladoc/errorreporter.vala
++++ b/libvaladoc/errorreporter.vala
+@@ -240,11 +240,14 @@ public class Valadoc.ErrorReporter : Object {
+ 		void* _func;
+ 		module.symbol ("isatty", out _func);
+ 		if (_func == null) {
+-			return false;
++			module.symbol ("_isatty", out _func);
++			if (_func == null) {
++				return false;
++			}
+ 		}
+ 
+ 		AttyFunc? func = (AttyFunc) _func;
+-		return func (fd) == 1;
++		return (bool) func (fd);
+ 	}
+ 
+ 	[PrintfFormat]
+diff --git a/vala/valareport.vala b/vala/valareport.vala
+index bdb11236f..b2b03220e 100644
+--- a/vala/valareport.vala
++++ b/vala/valareport.vala
+@@ -410,10 +410,13 @@ public class Vala.Report {
+ 		void* _func;
+ 		module.symbol ("isatty", out _func);
+ 		if (_func == null) {
+-			return false;
++			module.symbol ("_isatty", out _func);
++			if (_func == null) {
++				return false;
++			}
+ 		}
+ 
+ 		AttyFunc? func = (AttyFunc) _func;
+-		return func (fd) == 1;
++		return (bool) func (fd);
+ 	}
+ }
+-- 
+2.39.0.windows.1
+

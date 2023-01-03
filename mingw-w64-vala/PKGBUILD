@@ -22,11 +22,13 @@ source=(https://download.gnome.org/sources/${_realname}/${pkgver%.*}/${_realname
         0001-relocate-plugin-path.patch
         0002-squash-wszqkzqk.patch
         0003-squash-wszqkzqk.patch
+        0001-vala-correctly-judge-whether-to-color-output-on-wind.patch
         )
 sha256sums=('e1066221bf7b89cb1fa7327a3888645cb33b604de3bf45aa81132fd040b699bf'
             '266756afe0fa2871800e2d4cbf5db5c9e9e68abd52f7f694f077c7e425bc2772'
             'b88c5b09a0d5c06a5636daad65832e1d1581dd8e4d521ade0d4d6c2a473c07b9'
-            '2013db45f5e26cf0603c26c090361926179d9627b58b92dad3a7caa7f4c62558')
+            '2616f18a06f39f84f4ab29b396c46688c742709c3e287c5a3ee4c07e15158f5e'
+            '6245e8dab410c62f6ed0e50549ca64fb081d83377d7250b2d8414595ecb9fee6')
 
 prepare() {
   cd "${srcdir}"/${_realname}-${pkgver}
@@ -36,11 +38,13 @@ prepare() {
 
   patch -p1 -i "${srcdir}/0002-squash-wszqkzqk.patch"
   patch -p1 -i "${srcdir}/0003-squash-wszqkzqk.patch"
+  patch -p1 -i "${srcdir}/0001-vala-correctly-judge-whether-to-color-output-on-wind.patch"
 
   autoreconf -ivf
 }
 
 build() {
+  CC="ccache cc"
   [[ -d "${srcdir}/build-${MSYSTEM}" ]] && rm -rf "${srcdir}/build-${MSYSTEM}"
   mkdir -p "${srcdir}/build-${MSYSTEM}" && cd "${srcdir}/build-${MSYSTEM}"
 
