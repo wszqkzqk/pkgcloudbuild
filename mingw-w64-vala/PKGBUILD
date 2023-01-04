@@ -14,7 +14,9 @@ makedepends=("help2man"
              "${MINGW_PACKAGE_PREFIX}-libxslt"
              "${MINGW_PACKAGE_PREFIX}-autotools"
              "${MINGW_PACKAGE_PREFIX}-cc"
-             "${MINGW_PACKAGE_PREFIX}-vala")
+             "${MINGW_PACKAGE_PREFIX}-vala"
+             # 修复CI的奇怪问题
+             "${MINGW_PACKAGE_PREFIX}-ccache")
 depends=("${MINGW_PACKAGE_PREFIX}-glib2"
           $([[ ${MINGW_PACKAGE_PREFIX} == *-clang-aarch64* ]] || \
             echo "${MINGW_PACKAGE_PREFIX}-graphviz")) # Remove this workaround afer graphviz available
